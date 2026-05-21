@@ -1,66 +1,314 @@
-@import "tailwindcss";
+/* CURRENTLY unimplemented */
 
 
-@theme{
-    --color-dawn: #a4745e
+@theme {
+  --color-dawn:        #a4745e;
+  --color-dawn-light:  #c9a490;
+  --color-dawn-dark:   #7a5244;
+  --color-ink:         #1c1917;
+  --color-parchment:   #f8f4ef;
+  --color-mist:        #ede9e3;
+  --color-slate:       #505d7c;
+  --color-slate-deep:  #29274d;
 }
+ 
 
-    
-.banner{
-    position: relative;
-    height: 70vh;
+*, *::before, *::after {
+  box-sizing: border-box;
 }
-
-.banner::before{
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url(background_1.jpg);
-    background-size: cover;
-
-    mask-image: url(Real_splatter.gif);
-    mask-repeat: no-repeat; 
-    mask-size: 180vw min(80vh, 40rem) ;
-    mask-position: center;
-
-
+ 
+html {
+  scroll-behavior: smooth;
 }
-
-.name_font{
-    font-family: "Unbounded";
-    font-optical-sizing: auto;
-    font-weight: 500;
-    font-style: normal;
+ 
+body {
+  background-color: var(--color-parchment);
+  color: var(--color-ink);
+  overflow-x: hidden;
 }
-
-.crimson_font> {
+ 
+/* ─── Banner ─── */
+.banner {
+  position: relative;
+  height: 70vh;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+ 
+.banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url(background_1.jpg);
+  background-size: cover;
+  background-position: center;
+  mask-image: url(Real_splatter.gif);
+  mask-repeat: no-repeat;
+  mask-size: 180vw min(80vh, 40rem);
+  mask-position: center;
+  transition: transform 0.6s ease;
+}
+ 
+/* Subtle parallax feel on hover */
+.banner:hover::before {
+  transform: scale(1.02);
+}
+ 
+/* Dark scrim so name stays legible over any photo */
+.banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(28, 25, 23, 0.30) 0%,
+    rgba(28, 25, 23, 0.10) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+ 
+/* ─── Typography ─── */
+.name_font {
+  font-family: "Unbounded", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 24px rgba(28, 25, 23, 0.45);
+  position: relative;
+  z-index: 20;
+}
+ 
+.crimson_font {
   font-family: "Crimson Pro", serif;
   font-optical-sizing: auto;
   font-weight: 300;
   font-style: normal;
+  letter-spacing: 0.01em;
 }
-
-.crimson_italic> {
+ 
+.crimson_italic {
   font-family: "Crimson Pro", serif;
   font-optical-sizing: auto;
   font-weight: 300;
   font-style: italic;
+  letter-spacing: 0.01em;
 }
+ 
 
+.section-fade {
+  opacity: 0;
+  transform: translateY(28px);
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+ 
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+ 
+/* stagger helper classes */
+.delay-1 { animation-delay: 0.10s; }
+.delay-2 { animation-delay: 0.22s; }
+.delay-3 { animation-delay: 0.34s; }
+.delay-4 { animation-delay: 0.46s; }
+ 
+/* ─── Buttons ─── */
 @layer components {
+ 
   .button_1 {
-    @apply inline-block text-white px-6 py-2 rounded-lg shadow-md transition transform 
-           hover:scale-105 hover:shadow-xl my-5;
-    background: linear-gradient(135deg, #505d7c, #29274d);
+    @apply inline-block text-white px-6 py-2 rounded-lg shadow-md transition-all duration-300;
+    font-family: "Unbounded", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--color-slate), var(--color-slate-deep));
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
   }
+ 
+  /* Shimmer sweep on hover */
+  .button_1::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      110deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.14) 50%,
+      transparent 80%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.45s ease;
+  }
+ 
+  .button_1:hover::before {
+    transform: translateX(100%);
+  }
+ 
   .button_1:hover {
-    background: linear-gradient(135deg, #9c7966, #021212) ;
+    background: linear-gradient(135deg, var(--color-dawn), var(--color-dawn-dark));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(164, 116, 94, 0.35);
+    border-color: rgba(255, 255, 255, 0.08);
   }
-  .row_{
-    @apply items-center gap-4 text-gray-700 text-lg leading-relaxed rounded-lg
-    border-2 border-gray-500 py-3 flex-col sm:flex-row sm:items-center gap-3;
+ 
+  .button_1:active {
+    transform: translateY(0);
+    box-shadow: none;
   }
-  .horizontal_breaker{
-    @apply max-w-md h-1 bg-dawn mx-auto my-4 rounded-full;
+ 
+  /* ─── Section Divider ─── */
+  .horizontal_breaker {
+    @apply mx-auto my-5 rounded-full;
+    max-width: 3.5rem;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-dawn-light), var(--color-dawn-dark));
+    opacity: 0.85;
   }
+ 
+  /* ─── Card Row ─── */
+  .row_ {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0.875rem;
+    background: #ffffff;
+    border: 1px solid rgba(164, 116, 94, 0.15);
+    box-shadow: 0 1px 4px rgba(28, 25, 23, 0.05), 0 4px 16px rgba(28, 25, 23, 0.04);
+    color: #374151;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    text-align: left;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    flex-direction: column;
+  }
+ 
+  @media (min-width: 640px) {
+    .row_ {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+ 
+  .row_:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 28px rgba(28, 25, 23, 0.10);
+    border-color: rgba(164, 116, 94, 0.40);
+  }
+ 
+  /* Constrain logos inside cards */
+  .row_ img {
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+ 
+  /* Label inside cards */
+  .row_ span.font-bold {
+    font-family: "Crimson Pro", serif;
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: var(--color-slate-deep);
+    display: block;
+    margin-bottom: 0.15rem;
+  }
+ 
+  /* ─── Section heading accent line ─── */
+  .section-heading {
+    position: relative;
+    display: inline-block;
+  }
+ 
+  /* ─── Thin top accent bar on sections ─── */
+  .section-block {
+    position: relative;
+    padding-top: 2.5rem;
+  }
+ 
+  .section-block::before {
+    content: '';
+    display: block;
+    width: 3.5rem;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-dawn), transparent);
+    margin: 0 auto 0.5rem;
+  }
+ 
+  /* ─── Footer strip ─── */
+  .footer-strip {
+    border-top: 1px solid rgba(164, 116, 94, 0.20);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    font-family: "Unbounded", sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(28, 25, 23, 0.35);
+    margin-top: 4rem;
+  }
+ 
+  /* ─── Skill/Tag pill ─── */
+  .skill-pill {
+    display: inline-block;
+    font-family: "Unbounded", sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+    background: rgba(164, 116, 94, 0.10);
+    color: var(--color-dawn-dark);
+    border: 1px solid rgba(164, 116, 94, 0.25);
+    transition: background 0.2s, border-color 0.2s;
+  }
+ 
+  .skill-pill:hover {
+    background: rgba(164, 116, 94, 0.20);
+    border-color: rgba(164, 116, 94, 0.50);
+  }
+ 
+  /* ─── About blurb ─── */
+  .about-text {
+    font-family: "Crimson Pro", serif;
+    font-size: 1.2rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: #4b4543;
+    max-width: 60ch;
+    margin: 0 auto;
+  }
+ 
+  .about-text strong {
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+ 
+}
+ 
+/* ─── Scrollbar (optional polish) ─── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+ 
+::-webkit-scrollbar-track {
+  background: var(--color-mist);
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: var(--color-dawn-light);
+  border-radius: 99px;
+}
+ 
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dawn);
 }
